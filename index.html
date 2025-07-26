@@ -3,80 +3,151 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hello World</title>
+    <title>Webpage Calculator</title>
+    <style>
+        body {
+            background: linear-gradient(120deg, #f8fafc 0%, #e0e7ff 100%);
+            font-family: 'Segoe UI', 'Roboto', 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 40px auto;
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+            padding: 32px 24px;
+        }
+        h1 {
+            text-align: center;
+            color: #4f46e5;
+            margin-bottom: 24px;
+        }
+        label {
+            font-size: 1.1rem;
+            color: #374151;
+            font-weight: 500;
+        }
+        textarea {
+            width: 100%;
+            font-size: 1rem;
+            border-radius: 8px;
+            border: 1px solid #cbd5e1;
+            padding: 10px;
+            margin-top: 8px;
+            margin-bottom: 24px;
+            resize: vertical;
+            box-sizing: border-box;
+        }
+        .result-section {
+            margin-top: 16px;
+        }
+        .result-label {
+            font-size: 1.1rem;
+            color: #374151;
+            font-weight: 500;
+            margin-bottom: 8px;
+            display: block;
+        }
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin-top: 8px;
+        }
+        td {
+            padding: 8px 12px;
+            font-size: 1rem;
+            border-bottom: 1px solid #e5e7eb;
+            text-align: center;
+        }
+        tr:last-child td {
+            border-bottom: 1px solid #e5e7eb;
+        }
+        .mod-cell {
+            font-weight: bold;
+            border: 2px solid #000;
+            background: #f3f4f6;
+            border-radius: 6px;
+            border-bottom: 2px solid #000 !important;
+        }
+    </style>
 </head>
 <body>
-<div style="margin-top: 10px;">
-        <label for="inputString">Enter a string:</label><br>
-        <textarea id="inputString" placeholder="Enter a string here" rows="7" cols="15"></textarea>
+    <div class="container">
+        <h1>Webpage Calculator</h1>
+        <div style="margin-top: 10px;">
+            <label for="inputString">Enter a string:</label><br>
+            <textarea id="inputString" placeholder="Enter a string here" rows="7" cols="30"></textarea>
+        </div>
+        <div class="result-section">
+            <span class="result-label">Result:</span><br>
+            <table id="resultTable" style="margin-top: 5px;"></table>
+        </div>
     </div>
-<div style="margin-top: 10px;">
-    <span>Result:</span><br>
-    <table id="resultTable" style="margin-top: 5px;"></table>
-</div>
-<script>
-    const input = document.getElementById('inputString');
-    const resultTable = document.getElementById('resultTable');
-    input.addEventListener('input', function() {
-        const str = input.value;
-        const lines = str.split('\n');
-        resultTable.innerHTML = '';
-        for (let i = 0; i < lines.length; i++) {
-            const line = lines[i];
-            if (line.trim() === '') continue; // Skip empty lines
-            let asciiCodes = [];
-            let numBuffer = '';
-            let numSum = 0;
-            for (let ch of line) {
-                if (ch >= '0' && ch <= '9') {
-                    numBuffer += ch;
-                } else {
-                    if (numBuffer.length > 0) {
-                        numSum += numBuffer.split('').reduce((acc, digit) => acc + parseInt(digit, 10), 0);
-                        numBuffer = '';
-                    }
-                    // Odd line: small letters, even line: large letters
-                    if (i % 2 === 0 && ch >= 'a' && ch <= 'z') {
-                        asciiCodes.push(ch.charCodeAt(0));
-                    } else if (i % 2 === 1 && ch >= 'a' && ch <= 'z') {
-                        // Convert to uppercase and get ASCII
-                        asciiCodes.push(ch.toUpperCase().charCodeAt(0));
+    <script>
+        const input = document.getElementById('inputString');
+        const resultTable = document.getElementById('resultTable');
+        input.addEventListener('input', function() {
+            const str = input.value;
+            const lines = str.split('\n');
+            resultTable.innerHTML = '';
+            for (let i = 0; i < lines.length; i++) {
+                const line = lines[i];
+                if (line.trim() === '') continue; // Skip empty lines
+                let asciiCodes = [];
+                let numBuffer = '';
+                let numSum = 0;
+                for (let ch of line) {
+                    if (ch >= '0' && ch <= '9') {
+                        numBuffer += ch;
+                    } else {
+                        if (numBuffer.length > 0) {
+                            numSum += numBuffer.split('').reduce((acc, digit) => acc + parseInt(digit, 10), 0);
+                            numBuffer = '';
+                        }
+                        // Odd line: small letters, even line: large letters
+                        if (i % 2 === 0 && ch >= 'a' && ch <= 'z') {
+                            asciiCodes.push(ch.charCodeAt(0));
+                        } else if (i % 2 === 1 && ch >= 'a' && ch <= 'z') {
+                            // Convert to uppercase and get ASCII
+                            asciiCodes.push(ch.toUpperCase().charCodeAt(0));
+                        }
                     }
                 }
+                if (numBuffer.length > 0) {
+                    numSum += numBuffer.split('').reduce((acc, digit) => acc + parseInt(digit, 10), 0);
+                }
+                if (numSum > 0) {
+                    asciiCodes.push(numSum);
+                }
+                // If no letters matched, but there was a number, only show the sum
+                if (asciiCodes.length === 0 && numSum > 0) {
+                    asciiCodes.push(numSum);
+                }
+                const lineSum = asciiCodes.reduce((acc, val) => acc + Number(val), 0);
+                const lineMod = lineSum % 49;
+                const row = document.createElement('tr');
+                const cell1 = document.createElement('td');
+                cell1.textContent = asciiCodes.join(' ');
+                const cell2 = document.createElement('td');
+                cell2.textContent = '=';
+                const cell3 = document.createElement('td');
+                cell3.textContent = lineSum;
+                const cell4 = document.createElement('td');
+                cell4.textContent = '%49';
+                const cell5 = document.createElement('td');
+                cell5.textContent = lineMod;
+                cell5.className = 'mod-cell';
+                row.appendChild(cell1);
+                row.appendChild(cell2);
+                row.appendChild(cell3);
+                row.appendChild(cell4);
+                row.appendChild(cell5);
+                resultTable.appendChild(row);
             }
-            if (numBuffer.length > 0) {
-                numSum += numBuffer.split('').reduce((acc, digit) => acc + parseInt(digit, 10), 0);
-            }
-            if (numSum > 0) {
-                asciiCodes.push(numSum);
-            }
-            // If no letters matched, but there was a number, only show the sum
-            if (asciiCodes.length === 0 && numSum > 0) {
-                asciiCodes.push(numSum);
-            }
-            const lineSum = asciiCodes.reduce((acc, val) => acc + Number(val), 0);
-            const lineMod = lineSum % 49;
-            const row = document.createElement('tr');
-            const cell1 = document.createElement('td');
-            cell1.textContent = asciiCodes.join(' ');
-            const cell2 = document.createElement('td');
-            cell2.textContent = '=';
-            const cell3 = document.createElement('td');
-            cell3.textContent = lineSum;
-            const cell4 = document.createElement('td');
-            cell4.textContent = '%49';
-            const cell5 = document.createElement('td');
-            cell5.textContent = lineMod;
-            cell5.style.fontWeight = 'bold';
-            cell5.style.border = '2px solid black';
-            row.appendChild(cell1);
-            row.appendChild(cell2);
-            row.appendChild(cell3);
-            row.appendChild(cell4);
-            row.appendChild(cell5);
-            resultTable.appendChild(row);
-        }
-    });
-</script>
+        });
+    </script>
 </body>
 </html>
