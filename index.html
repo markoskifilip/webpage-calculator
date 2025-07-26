@@ -27,7 +27,8 @@
                     numBuffer += ch;
                 } else {
                     if (numBuffer.length > 0) {
-                        numSum += parseInt(numBuffer, 10);
+                        // Sum the digits of the number
+                        numSum += numBuffer.split('').reduce((acc, digit) => acc + parseInt(digit, 10), 0);
                         numBuffer = '';
                     }
                     if (ch !== ' ' && ch !== '\n') {
@@ -36,9 +37,11 @@
                 }
             }
             if (numBuffer.length > 0) {
-                numSum += parseInt(numBuffer, 10);
+                numSum += numBuffer.split('').reduce((acc, digit) => acc + parseInt(digit, 10), 0);
             }
+            // Only push the sum if any digits were found
             if (numSum > 0) {
+                asciiCodes = asciiCodes.filter(code => typeof code === 'number');
                 asciiCodes.push(numSum);
             }
             result.textContent = asciiCodes.join(' ');
