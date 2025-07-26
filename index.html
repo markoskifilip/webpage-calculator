@@ -79,7 +79,7 @@
         <h1>Webpage Calculator</h1>
         <div style="margin-top: 10px;">
             <label for="inputString">Enter a string:</label><br>
-            <textarea id="inputString" placeholder="Enter a string here" rows="7" cols="30"></textarea>
+            <textarea id="inputString" placeholder="Enter a string here" rows="13" cols="30"></textarea>
         </div>
         <div class="result-section">
             <span class="result-label">Result:</span><br>
@@ -93,7 +93,6 @@
             const str = input.value;
             const lines = str.split('\n');
             resultTable.innerHTML = '';
-            let resultCount = 0;
             for (let i = 0; i < lines.length; i++) {
                 const line = lines[i];
                 if (line.trim() === '') continue; // Skip empty lines
@@ -111,7 +110,7 @@
                         if (ch === ' ') {
                             continue;
                         }
-                        if (resultCount % 2 === 0) {
+                        if (i % 2 === 0) {
                             asciiCodes.push(ch.toLowerCase().charCodeAt(0));
                         } else {
                             asciiCodes.push(ch.toUpperCase().charCodeAt(0));
@@ -130,8 +129,8 @@
                 const lineSum = asciiCodes.reduce((acc, val) => acc + Number(val), 0);
                 let lineMod;
                 let modLabel = '%49';
-                if (resultCount === 6) {
-                    // Seventh result: sum digits until one digit
+                if (i === 6) {
+                    // Seventh line: sum digits until one digit
                     let digitSum = lineSum;
                     while (digitSum >= 10) {
                         digitSum = digitSum.toString().split('').reduce((acc, d) => acc + parseInt(d, 10), 0);
@@ -159,7 +158,6 @@
                 row.appendChild(cell4);
                 row.appendChild(cell5);
                 resultTable.appendChild(row);
-                resultCount++;
             }
         });
     </script>
