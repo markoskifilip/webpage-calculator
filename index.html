@@ -12,15 +12,15 @@
 </div>
 <div style="margin-top: 10px;">
     <span>Result:</span><br>
-    <span id="asciiResult"></span>
+    <table id="resultTable" style="margin-top: 5px;"></table>
 </div>
 <script>
     const input = document.getElementById('inputString');
-    const result = document.getElementById('asciiResult');
+    const resultTable = document.getElementById('resultTable');
     input.addEventListener('input', function() {
         const str = input.value;
         const lines = str.split('\n');
-        let outputLines = [];
+        resultTable.innerHTML = '';
         for (let line of lines) {
             let asciiCodes = [];
             let numBuffer = '';
@@ -44,11 +44,28 @@
             if (numSum > 0) {
                 asciiCodes.push(numSum);
             }
-            // Calculate the sum of all values in asciiCodes
             const lineSum = asciiCodes.reduce((acc, val) => acc + Number(val), 0);
-            outputLines.push(asciiCodes.join(' ') + ' = ' + lineSum);
+            const lineMod = lineSum % 49;
+            const row = document.createElement('tr');
+            const cell1 = document.createElement('td');
+            cell1.textContent = asciiCodes.join(' ');
+            const cell2 = document.createElement('td');
+            cell2.textContent = '=';
+            const cell3 = document.createElement('td');
+            cell3.textContent = lineSum;
+            const cell4 = document.createElement('td');
+            cell4.textContent = '%49';
+            const cell5 = document.createElement('td');
+            cell5.textContent = lineMod;
+            cell5.style.fontWeight = 'bold';
+            cell5.style.border = '2px solid black';
+            row.appendChild(cell1);
+            row.appendChild(cell2);
+            row.appendChild(cell3);
+            row.appendChild(cell4);
+            row.appendChild(cell5);
+            resultTable.appendChild(row);
         }
-        result.innerText = outputLines.join('\n');
     });
 </script>
 </body>
