@@ -107,11 +107,11 @@
                             numSum += numBuffer.split('').reduce((acc, digit) => acc + parseInt(digit, 10), 0);
                             numBuffer = '';
                         }
-                        // Odd line: small letters, even line: large letters
-                        if (i % 2 === 0 && ch >= 'a' && ch <= 'z') {
-                            asciiCodes.push(ch.charCodeAt(0));
-                        } else if (i % 2 === 1 && ch >= 'a' && ch <= 'z') {
-                            // Convert to uppercase and get ASCII
+                        if (i % 2 === 0) {
+                            // Odd line: convert all to lowercase and get ASCII
+                            asciiCodes.push(ch.toLowerCase().charCodeAt(0));
+                        } else {
+                            // Even line: convert all to uppercase and get ASCII
                             asciiCodes.push(ch.toUpperCase().charCodeAt(0));
                         }
                     }
@@ -122,7 +122,6 @@
                 if (numSum > 0) {
                     asciiCodes.push(numSum);
                 }
-                // If no letters matched, but there was a number, only show the sum
                 if (asciiCodes.length === 0 && numSum > 0) {
                     asciiCodes.push(numSum);
                 }
