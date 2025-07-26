@@ -107,6 +107,10 @@
                             numSum += numBuffer.split('').reduce((acc, digit) => acc + parseInt(digit, 10), 0);
                             numBuffer = '';
                         }
+                        if (ch === ' ') {
+                            // Ignore spaces
+                            continue;
+                        }
                         if (i % 2 === 0) {
                             // Odd line: convert all to lowercase and get ASCII
                             asciiCodes.push(ch.toLowerCase().charCodeAt(0));
