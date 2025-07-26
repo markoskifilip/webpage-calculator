@@ -22,6 +22,7 @@
         const lines = str.split('\n');
         resultTable.innerHTML = '';
         for (let line of lines) {
+            if (line.trim() === '') continue; // Skip empty lines
             let asciiCodes = [];
             let numBuffer = '';
             let numSum = 0;
