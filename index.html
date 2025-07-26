@@ -19,8 +19,32 @@
         const result = document.getElementById('asciiResult');
         input.addEventListener('input', function() {
             const str = input.value;
-            const asciiCodes = Array.from(str).map(ch => ch.charCodeAt(0)).join(' ');
-            result.textContent = asciiCodes;
+            let asciiCodes = [];
+            let numBuffer = '';
+            for (let ch of str) {
+                if (ch >= '0' && ch <= '9') {
+                    numBuffer += ch;
+                } else {
+                    if (numBuffer.length > 0) {
+                        asciiCodes.push(numBuffer);
+                        numBuffer = '';
+                    }
+                    if (ch !== ' ' && ch !== '\n') {
+                        asciiCodes.push(ch.charCodeAt(0));
+                    }
+                }
+            }
+            if (numBuffer.length > 0) {
+                asciiCodes.push(numBuffer);
+            }
+            // Sum all numbers in asciiCodes
+            let output = asciiCodes.map(val => {
+                if (!isNaN(val)) {
+                    return val;
+                }
+                return val;
+            }).join(' ');
+            result.textContent = output;
         });
     </script>
 </body>
