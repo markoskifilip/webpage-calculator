@@ -6,48 +6,50 @@
     <title>Hello World</title>
 </head>
 <body>
-    <div style="margin-top: 10px;">
-        <label for="inputString">Enter a string:</label>
-        <textarea id="inputString" placeholder="Enter a string here" rows="7" cols="15"></textarea>
-    </div>
-    <div style="margin-top: 10px;">
-        <span>Result:</span><br>
-        <span id="asciiResult"></span>
-    </div>
-    <script>
-        const input = document.getElementById('inputString');
-        const result = document.getElementById('asciiResult');
-        input.addEventListener('input', function() {
-            const str = input.value;
-            const lines = str.split('\n');
-            let outputLines = [];
-            for (let line of lines) {
-                let asciiCodes = [];
-                let numBuffer = '';
-                let numSum = 0;
-                for (let ch of line) {
-                    if (ch >= '0' && ch <= '9') {
-                        numBuffer += ch;
-                    } else {
-                        if (numBuffer.length > 0) {
-                            numSum += numBuffer.split('').reduce((acc, digit) => acc + parseInt(digit, 10), 0);
-                            numBuffer = '';
-                        }
-                        if (ch !== ' ') {
-                            asciiCodes.push(ch.charCodeAt(0));
-                        }
+<div style="margin-top: 10px;">
+    <label for="inputString">Enter a string:</label>
+    <textarea id="inputString" placeholder="Enter a string here" rows="7" cols="15"></textarea>
+</div>
+<div style="margin-top: 10px;">
+    <span>Result:</span><br>
+    <span id="asciiResult"></span>
+</div>
+<script>
+    const input = document.getElementById('inputString');
+    const result = document.getElementById('asciiResult');
+    input.addEventListener('input', function() {
+        const str = input.value;
+        const lines = str.split('\n');
+        let outputLines = [];
+        for (let line of lines) {
+            let asciiCodes = [];
+            let numBuffer = '';
+            let numSum = 0;
+            for (let ch of line) {
+                if (ch >= '0' && ch <= '9') {
+                    numBuffer += ch;
+                } else {
+                    if (numBuffer.length > 0) {
+                        numSum += numBuffer.split('').reduce((acc, digit) => acc + parseInt(digit, 10), 0);
+                        numBuffer = '';
+                    }
+                    if (ch !== ' ') {
+                        asciiCodes.push(ch.charCodeAt(0));
                     }
                 }
-                if (numBuffer.length > 0) {
-                    numSum += numBuffer.split('').reduce((acc, digit) => acc + parseInt(digit, 10), 0);
-                }
-                if (numSum > 0) {
-                    asciiCodes.push(numSum);
-                }
-                outputLines.push(asciiCodes.join(' '));
             }
-            result.innerText = outputLines.join('\n');
-        });
-    </script>
+            if (numBuffer.length > 0) {
+                numSum += numBuffer.split('').reduce((acc, digit) => acc + parseInt(digit, 10), 0);
+            }
+            if (numSum > 0) {
+                asciiCodes.push(numSum);
+            }
+            // Calculate the sum of all values in asciiCodes
+            const lineSum = asciiCodes.reduce((acc, val) => acc + Number(val), 0);
+            outputLines.push(asciiCodes.join(' ') + ' = ' + lineSum);
+        }
+        result.innerText = outputLines.join('\n');
+    });
+</script>
 </body>
 </html>
