@@ -7,6 +7,19 @@
 </head>
 <body>
     <h1>Please enter a string</h1>
-    <input type="text" placeholder="Enter a string here" />
+    <input type="text" id="inputString" placeholder="Enter a string here" />
+    <div style="margin-top: 10px;">
+        <span>Result:</span>
+        <span id="asciiResult"></span>
+    </div>
+    <script>
+        const input = document.getElementById('inputString');
+        const result = document.getElementById('asciiResult');
+        input.addEventListener('input', function() {
+            const str = input.value;
+            const asciiCodes = Array.from(str).map(ch => ch.charCodeAt(0)).join(' ');
+            result.textContent = asciiCodes;
+        });
+    </script>
 </body>
 </html>
