@@ -11,7 +11,7 @@
         <textarea id="inputString" placeholder="Enter a string here" rows="7" cols="15"></textarea>
     </div>
     <div style="margin-top: 10px;">
-        <span>Result:</span>
+        <span>Result:</span><br>
         <span id="asciiResult"></span>
     </div>
     <script>
@@ -19,32 +19,34 @@
         const result = document.getElementById('asciiResult');
         input.addEventListener('input', function() {
             const str = input.value;
-            let asciiCodes = [];
-            let numBuffer = '';
-            let numSum = 0;
-            for (let ch of str) {
-                if (ch >= '0' && ch <= '9') {
-                    numBuffer += ch;
-                } else {
-                    if (numBuffer.length > 0) {
-                        // Sum the digits of the number
-                        numSum += numBuffer.split('').reduce((acc, digit) => acc + parseInt(digit, 10), 0);
-                        numBuffer = '';
-                    }
-                    if (ch !== ' ' && ch !== '\n') {
-                        asciiCodes.push(ch.charCodeAt(0));
+            const lines = str.split('\n');
+            let outputLines = [];
+            for (let line of lines) {
+                let asciiCodes = [];
+                let numBuffer = '';
+                let numSum = 0;
+                for (let ch of line) {
+                    if (ch >= '0' && ch <= '9') {
+                        numBuffer += ch;
+                    } else {
+                        if (numBuffer.length > 0) {
+                            numSum += numBuffer.split('').reduce((acc, digit) => acc + parseInt(digit, 10), 0);
+                            numBuffer = '';
+                        }
+                        if (ch !== ' ') {
+                            asciiCodes.push(ch.charCodeAt(0));
+                        }
                     }
                 }
+                if (numBuffer.length > 0) {
+                    numSum += numBuffer.split('').reduce((acc, digit) => acc + parseInt(digit, 10), 0);
+                }
+                if (numSum > 0) {
+                    asciiCodes.push(numSum);
+                }
+                outputLines.push(asciiCodes.join(' '));
             }
-            if (numBuffer.length > 0) {
-                numSum += numBuffer.split('').reduce((acc, digit) => acc + parseInt(digit, 10), 0);
-            }
-            // Only push the sum if any digits were found
-            if (numSum > 0) {
-                asciiCodes = asciiCodes.filter(code => typeof code === 'number');
-                asciiCodes.push(numSum);
-            }
-            result.textContent = asciiCodes.join(' ');
+            result.innerText = outputLines.join('\n');
         });
     </script>
 </body>
