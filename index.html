@@ -108,14 +108,11 @@
                             numBuffer = '';
                         }
                         if (ch === ' ') {
-                            // Ignore spaces
                             continue;
                         }
                         if (i % 2 === 0) {
-                            // Odd line: convert all to lowercase and get ASCII
                             asciiCodes.push(ch.toLowerCase().charCodeAt(0));
                         } else {
-                            // Even line: convert all to uppercase and get ASCII
                             asciiCodes.push(ch.toUpperCase().charCodeAt(0));
                         }
                     }
@@ -130,7 +127,19 @@
                     asciiCodes.push(numSum);
                 }
                 const lineSum = asciiCodes.reduce((acc, val) => acc + Number(val), 0);
-                const lineMod = lineSum % 49;
+                let lineMod;
+                let modLabel = '%49';
+                if (i === 6) {
+                    // Seventh line: sum digits until one digit
+                    let digitSum = lineSum;
+                    while (digitSum >= 10) {
+                        digitSum = digitSum.toString().split('').reduce((acc, d) => acc + parseInt(d, 10), 0);
+                    }
+                    lineMod = digitSum;
+                    modLabel = '∑';
+                } else {
+                    lineMod = lineSum % 49;
+                }
                 const row = document.createElement('tr');
                 const cell1 = document.createElement('td');
                 cell1.textContent = asciiCodes.join(' ');
@@ -139,7 +148,7 @@
                 const cell3 = document.createElement('td');
                 cell3.textContent = lineSum;
                 const cell4 = document.createElement('td');
-                cell4.textContent = '%49';
+                cell4.textContent = modLabel;
                 const cell5 = document.createElement('td');
                 cell5.textContent = lineMod;
                 cell5.className = 'mod-cell';
