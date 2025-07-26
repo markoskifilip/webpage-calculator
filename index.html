@@ -21,12 +21,13 @@
             const str = input.value;
             let asciiCodes = [];
             let numBuffer = '';
+            let numSum = 0;
             for (let ch of str) {
                 if (ch >= '0' && ch <= '9') {
                     numBuffer += ch;
                 } else {
                     if (numBuffer.length > 0) {
-                        asciiCodes.push(numBuffer);
+                        numSum += parseInt(numBuffer, 10);
                         numBuffer = '';
                     }
                     if (ch !== ' ' && ch !== '\n') {
@@ -35,16 +36,12 @@
                 }
             }
             if (numBuffer.length > 0) {
-                asciiCodes.push(numBuffer);
+                numSum += parseInt(numBuffer, 10);
             }
-            // Sum all numbers in asciiCodes
-            let output = asciiCodes.map(val => {
-                if (!isNaN(val)) {
-                    return val;
-                }
-                return val;
-            }).join(' ');
-            result.textContent = output;
+            if (numSum > 0) {
+                asciiCodes.push(numSum);
+            }
+            result.textContent = asciiCodes.join(' ');
         });
     </script>
 </body>
